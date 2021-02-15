@@ -171,7 +171,8 @@ const DOM = {
 // função para tratar o valor da transação
 const Utils = {
   formatAmount(value) {
-    return value = Number(value) * 100
+    value = value * 100
+    return Math.round(value)
   },
 
   formatDate(date) {
