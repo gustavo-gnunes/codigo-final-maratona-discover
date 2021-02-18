@@ -95,10 +95,16 @@ button:hover {
 
   opacity: 0.6;
   margin-right: 20px;
+
+  visibility: visible;
 }
 
 .button.cancel:hover {
   opacity: 1;
+}
+
+.button.cancel.disable {
+  visibility: hidden;
 }
 
 /* Hearder =======================*/

@@ -5,6 +5,22 @@ const Modal = {
     document //é uma classe que procura tudo que tem no html
       .querySelector('.modal-overlay') // procura a classe modal-oberlay do html
       .classList.add('active') // vai achar essa classe a cima e add uma classe chamada active
+
+  },
+  openFormCarregado(description, amount, date) {
+    document.querySelector('.modal-overlay').classList.add('active')
+    document.querySelector(".button.cancel").classList.add('disable')
+
+    // qdo encontrar o / na data, ele reparte em um array de string
+    let splittedDate = date.split("/")
+    // a data é salva em 3 posição do array Ex: 2021-10-23 0->2021 1->10 2->23
+    // pega cada posição e formata na data vista aqui no Brasil Ex: 23-10-2021
+    date = `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`
+
+    document.querySelector('input#description').value = description
+    document.querySelector('input#amount').value = amount /100
+    document.querySelector('input#date').value = date
+
   },
   close() {
     // fechar o modal
@@ -12,7 +28,9 @@ const Modal = {
     document
       .querySelector('.modal-overlay')
       .classList.remove('active')
-  }
+
+    document.querySelector(".button.cancel").classList.remove('disable')
+  },
 }
 
 // guarda informações dentro do navegador
@@ -74,11 +92,20 @@ const Transaction = {
     App.reload()
   },
 
+  update(index) {
+    let getArray = Transaction.all.slice(index, index +1)
+
+    Modal.openFormCarregado(getArray[0].description, getArray[0].amount, getArray[0].date)
+
+    Transaction.remove(index)
+  },
+
   remove(index) {
     // splice-> metodo que aplica em arrays, ele pega a posição do array
     // 1-> seria qtos elementos vai deletar, nesse caso é 1, por isso está o numero 1
     Transaction.all.splice(index, 1)
 
+    
     App.reload()
   },
 
@@ -147,6 +174,9 @@ const DOM = {
       <td class="date">${transaction.date}</td>
       <td>
         <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
+      </td>
+      <td>
+        <img onclick="Transaction.update(${index})" src="./assets/btnEditar.svg" alt="Alterar transação">
       </td>
     `
 
@@ -307,7 +337,8 @@ const App = {
 // inicia a aplicação
 App.init()
 
-Transaction.remove(0)
+//Transaction.remove(0)
+
 
 
 
